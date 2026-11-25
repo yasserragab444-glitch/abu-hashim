@@ -30,6 +30,10 @@ nav{display:flex;gap:22px;margin-inline-start:auto}
 nav a{text-decoration:none;color:var(--mut)}nav a:hover{color:var(--gold)}
 .cb{background:var(--gold);color:#000;border:0;border-radius:8px;padding:8px 16px;font-weight:700;cursor:pointer}
 .cb span{background:#000;color:var(--gold);border-radius:99px;padding:0 8px;margin-inline-start:6px}
+.ob{background:var(--red);color:#fff;overflow:hidden;white-space:nowrap;font-weight:700;padding:6px 0}
+.ob span{display:inline-block;padding-inline-start:100%;animation:mq 22s linear infinite}
+@keyframes mq{to{transform:translateX(100%)}}
+@media (prefers-reduced-motion:reduce){.ob span{animation:none;padding:0 5vw}}
 .hero{min-height:78vh;display:grid;place-items:center;text-align:center;background:radial-gradient(circle at 50% 0,#3d0a10 0,#120305 45%,#000 80%)}
 .hc{padding:40px 5vw;max-width:760px}
 .hc img{width:min(280px,60vw);margin:0 auto 6px}
@@ -47,8 +51,10 @@ h2{font-size:clamp(28px,4vw,40px);margin-bottom:8px}.sub{color:var(--mut);margin
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
 .pc{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
 .pc.off{opacity:.55}
-.pi{aspect-ratio:4/3;background:#080808;display:grid;place-items:center}
+.pi{position:relative;aspect-ratio:4/3;background:#080808;display:grid;place-items:center}
 .pi img{width:100%;height:100%;object-fit:cover}.pi.ph img{width:52%;height:auto;object-fit:contain;opacity:.6}
+.bds{position:absolute;top:8px;inset-inline-start:8px;display:flex;flex-direction:column;gap:4px}
+.bd{background:var(--red);color:#fff;font-size:13px;font-weight:700;padding:1px 10px;border-radius:99px}.bd.of{background:var(--gold);color:#000}
 .pb{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
 .pb h3{font-size:20px}.pd{font-size:14px;color:var(--mut);margin:0;line-height:1.5}
 .pr{color:var(--gold);font-weight:700}.pr s{color:var(--mut);font-weight:400;margin-inline-end:8px}
@@ -56,6 +62,9 @@ h2{font-size:clamp(28px,4vw,40px);margin-bottom:8px}.sub{color:var(--mut);margin
 .st button{width:38px;height:38px;border:0;background:#222;border-radius:6px;font-size:20px;cursor:pointer}
 .add{margin-top:auto;background:var(--gold);color:#000;border:0;border-radius:8px;padding:10px;font-weight:700;cursor:pointer}
 .add:disabled{background:#333;color:var(--mut);cursor:default}
+.rg{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.rv{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.rv b{color:var(--gold);letter-spacing:2px}.rv p{margin:6px 0 0;color:var(--mut)}
 .pro{display:grid;gap:14px;margin:18px 0 0;padding:0;list-style:none}
 .pro li{padding-inline-start:16px;border-inline-start:3px solid var(--red)}
 .fm{display:grid;gap:12px}
@@ -65,7 +74,7 @@ h2{font-size:clamp(28px,4vw,40px);margin-bottom:8px}.sub{color:var(--mut);margin
 footer{border-top:1px solid var(--line);padding:36px 5vw;color:var(--mut)}
 footer .fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px;line-height:2}
 footer b{color:var(--tx)}footer a{color:var(--gold)}.fl{width:90px;margin-bottom:6px}
-footer .cp{margin-top:28px;padding-top:18px;border-top:1px solid var(--line);text-align:center;font:600 14px 'El Messiri',sans-serif;letter-spacing:.14em;color:var(--gold);direction:ltr}
+footer .cp{margin-top:28px;padding-top:18px;border-top:1px solid var(--line);text-align:center;font:600 14px 'El Messiri',sans-serif;letter-spacing:.14em;color:var(--gold);direction:ltr;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
 .ov{position:fixed;inset:0;background:#000b;z-index:40;display:none}.ov.on{display:block}
 aside{position:fixed;top:0;bottom:0;inset-inline-start:0;width:min(430px,100vw);background:var(--card);z-index:50;transform:translateX(105%);visibility:hidden;transition:transform .3s,visibility .3s;overflow:auto;padding:calc(18px + env(safe-area-inset-top,0px)) 18px calc(18px + env(safe-area-inset-bottom,0px))}
 aside.on{transform:none;visibility:visible}
@@ -89,15 +98,19 @@ aside.on{transform:none;visibility:visible}
 <nav><a href="#products">المنيو</a><a href="#about">عنّا</a><a href="#contact">تواصل معنا</a><a href="track.html">تتبع طلبك</a></nav>
 <button class="cb" id="cb" aria-label="فتح السلة">السلة<span id="cn">0</span></button>
 </header>
+<div class="ob" id="ob" hidden><span id="obt"></span></div>
 <main id="top">
 <div class="hero"><div class="hc"><img class="tap3" src="img/logo.png" alt="جزارة ومطعم أبوهاشم"><h1>جزارة ومطعم أبوهاشم</h1><p>لحوم طازجة ومشويات وسندوتشات ووجبات، وخدمة توصيل للمنازل.</p><a class="btn" href="#products">اطلب الآن</a></div></div>
+<section id="offs" hidden style="background:#120305"><div class="wrap"><h2>العروض</h2><p class="sub">أصناف عليها خصم دلوقتي.</p><div class="grid" id="offg"></div></div></section>
+<section id="bss" hidden><div class="wrap"><h2>الأكثر طلباً</h2><p class="sub">أصناف زبائننا بيرجعوا يطلبوها تاني.</p><div class="grid" id="bsg"></div></div></section>
 <section id="products"><div class="wrap">
 <h2>المنيو</h2><p class="sub">اختار الصنف والكمية. أصناف اللحوم بالكيلو وتقدر تطلب ربع أو نص كيلو.</p>
 <div class="sec" id="sec"></div>
 <div class="tabs" id="tabs"></div>
 <div class="grid" id="grid"><p class="sub">جاري تحميل المنيو...</p></div>
 </div></section>
-<section id="about" style="background:#0c0c0c"><div class="wrap">
+<section id="rvs" hidden style="background:#0c0c0c"><div class="wrap"><h2>آراء عملائنا</h2><p class="sub" id="rva"></p><div class="rg" id="rvg"></div></div></section>
+<section id="about"><div class="wrap">
 <h2>عن أبوهاشم</h2><p class="sub">جزارة ومطعم، من اللحمة الطازجة لحد الأكل الجاهز على السفرة.</p>
 <ul class="pro">
 <li><b>جزارة:</b> كندوز وضاني وبتلو وفواكه لحوم ومصنعات بلدي طازجة.</li>
@@ -109,7 +122,7 @@ aside.on{transform:none;visibility:visible}
 <div><img class="fl" src="img/logo.png" alt=""><br>جزارة ومطعم أبوهاشم<br><a href="track.html">تتبع طلبك</a></div>
 <div id="ct2"><b>تواصل معنا</b><br>واتساب: <a id="wal" href="https://wa.me/201110684337" dir="ltr">01110684337</a></div>
 <div id="pm2"><b>طرق الدفع</b></div>
-</div><div class="wrap cp">© 2026 Eng. Yasser Ragab · All Rights Reserved</div></footer>
+</div><div class="wrap cp" id="cpy">© 2026 Eng. Yasser Ragab · All Rights Reserved</div></footer>
 <div class="ov" id="ov"></div>
 <aside id="cart" aria-label="السلة">
 <button class="x" id="cx" aria-label="إغلاق">×</button>
@@ -149,14 +162,17 @@ const pr=p=>Math.round(p.price_per_kg*(1-p.discount_percent/100)*100)/100;
 const st=p=>p.unit=='piece'?1:.25,mq=p=>p.unit=='piece'?1:Math.max(.25,+p.min_kg||.25);
 function drawTabs(){$('sec').innerHTML=[['butcher','الجزارة'],['kababgy','الكبابجي']].map(a=>`<button data-s="${a[0]}" class="${sec==a[0]?'on':''}">${a[1]}</button>`).join('');
 $('tabs').innerHTML='<button data-c="all" class="'+(cat=='all'?'on':'')+'">الكل</button>'+C.filter(c=>c.section==sec).map(c=>`<button data-c="${c.id}" class="${cat==c.id?'on':''}">${esc(c.name)}</button>`).join('')}
-function card(p){const q=qty[p.id]||mq(p),u=p.unit,pc=pr(p),ok=p.is_available&&pc>0;
-return `<article class="pc${ok?'':' off'}"><div class="pi${p.image_url?'':' ph'}"><img src="${esc(p.image_url||'img/logo.png')}" alt="${esc(p.name)}" loading="lazy"></div><div class="pb"><h3>${esc(p.name)}</h3>${p.description?`<p class="pd">${esc(p.description)}</p>`:''}<div class="pr">${p.discount_percent>0?`<s>${n(p.price_per_kg)}</s>`:''}${pc>0?n(pc)+' ج / '+(u=='piece'?'قطعة':'كيلو'):'السعر عند الطلب'}</div><div class="st"><button data-a="m" data-i="${p.id}" aria-label="تقليل">−</button><span>${w(q,u)}</span><button data-a="p" data-i="${p.id}" aria-label="زيادة">+</button></div><button class="add" data-a="add" data-i="${p.id}"${ok?'':' disabled'}>${ok?'أضف للسلة · '+n(pc*q)+' ج':'غير متاح حالياً'}</button></div></article>`}
-function draw(){drawTabs();const ids=new Set(C.filter(c=>c.section==sec&&(cat=='all'||c.id==cat)).map(c=>c.id)),L=P.filter(p=>ids.has(p.category_id));$('grid').innerHTML=L.length?L.map(card).join(''):'<p class="sub">مفيش أصناف هنا حالياً.</p>'}
+function card(p){const q=qty[p.id]||mq(p),u=p.unit,pc=pr(p),ok=p.is_available&&pc>0,bd=(p.is_best_seller?'<span class="bd">الأكثر طلباً</span>':'')+(p.discount_percent>0?`<span class="bd of">خصم ${n(p.discount_percent)}%</span>`:'');
+return `<article class="pc${ok?'':' off'}"><div class="pi${p.image_url?'':' ph'}"><img src="${esc(p.image_url||'img/logo.png')}" alt="${esc(p.name)}" loading="lazy">${bd?`<div class="bds">${bd}</div>`:''}</div><div class="pb"><h3>${esc(p.name)}</h3>${p.description?`<p class="pd">${esc(p.description)}</p>`:''}<div class="pr">${p.discount_percent>0?`<s>${n(p.price_per_kg)}</s>`:''}${pc>0?n(pc)+' ج / '+(u=='piece'?'قطعة':'كيلو'):'السعر عند الطلب'}</div><div class="st"><button data-a="m" data-i="${p.id}" aria-label="تقليل">−</button><span>${w(q,u)}</span><button data-a="p" data-i="${p.id}" aria-label="زيادة">+</button></div><button class="add" data-a="add" data-i="${p.id}"${ok?'':' disabled'}>${ok?'أضف للسلة · '+n(pc*q)+' ج':'غير متاح حالياً'}</button></div></article>`}
+function draw(){drawTabs();const ids=new Set(C.filter(c=>c.section==sec&&(cat=='all'||c.id==cat)).map(c=>c.id)),L=P.filter(p=>ids.has(p.category_id));$('grid').innerHTML=L.length?L.map(card).join(''):'<p class="sub">مفيش أصناف هنا حالياً.</p>';
+const av=P.filter(p=>p.is_available&&pr(p)>0),of=av.filter(p=>p.discount_percent>0),bs=av.filter(p=>p.is_best_seller);
+$('offg').innerHTML=of.map(card).join('');$('offs').hidden=!of.length;$('bsg').innerHTML=bs.map(card).join('');$('bss').hidden=!bs.length}
 $('sec').onclick=e=>{const b=e.target.closest('button');if(!b)return;sec=b.dataset.s;cat='all';draw()};
 $('tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;cat=b.dataset.c;draw()};
 let ttT;function tt(m){let e=$('tt');if(!e){e=document.createElement('div');e.id='tt';e.setAttribute('role','status');document.body.appendChild(e)}e.textContent=m+' اتضاف للسلة ✓';e.classList.add('on');clearTimeout(ttT);ttT=setTimeout(()=>e.classList.remove('on'),1600)}
-$('grid').onclick=e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const p=P.find(x=>x.id==b.dataset.i);if(!p)return;const q=qty[p.id]||mq(p),a=b.dataset.a;
+const gc=e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const p=P.find(x=>x.id==b.dataset.i);if(!p)return;const q=qty[p.id]||mq(p),a=b.dataset.a;
 if(a=='m')qty[p.id]=Math.max(mq(p),q-st(p));else if(a=='p')qty[p.id]=q+st(p);else{const c=cart[p.id];cart[p.id]={name:p.name,price:pr(p),unit:p.unit,q:(c?c.q:0)+q};qty[p.id]=mq(p);tt(p.name)}draw();rc()};
+['grid','offg','bsg'].forEach(i=>$(i).onclick=gc);
 function zu(t){const z=ZS[$('zn').value],e=$('dn');e.textContent=z?'التوصيل لـ '+z.name+': '+(z.fee?n(z.fee)+' ج':'مجاناً')+' — الإجمالي مع التوصيل: '+n((t||0)+z.fee)+' ج':'مصاريف التوصيل بتتحدد حسب منطقتك، وهنأكدها معاك على واتساب مع تأكيد الطلب.'}
 function rc(){const k=Object.keys(cart);let t=0;try{localStorage.setItem('ah_cart',JSON.stringify(cart))}catch(e){}$('cn').textContent=k.length;
 $('ci').innerHTML=k.length?k.map(id=>{const c=cart[id];t+=c.price*c.q;return `<div class="ci"><b>${esc(c.name)}</b><span>${n(c.price*c.q)} ج</span><div class="st"><button data-a="m" data-k="${id}" aria-label="تقليل">−</button><span>${w(c.q,c.unit)}</span><button data-a="p" data-k="${id}" aria-label="زيادة">+</button></div></div>`}).join(''):'<p class="sub">السلة فاضية.</p>';
@@ -196,13 +212,18 @@ $('pm2').innerHTML='<b>طرق الدفع</b><br>'+l.map(esc).join('<br>');
 const f=()=>{const r=document.querySelector('[name=py]:checked'),p=$('pn');p.hidden=!(num&&r&&!/كاش/.test(r.value));if(!p.hidden)p.innerHTML='حوّل على <b dir="ltr">'+esc(num)+'</b> وابعت صورة التحويل على واتساب مع الطلب.'};
 document.querySelectorAll('[name=py]').forEach(r=>r.onchange=f);f()}
 setPay(null,null);draw();rc();
-Promise.all([fetch(SB+'/rest/v1/categories?select=id,name,section,sort_order&order=sort_order',H).then(r=>r.ok?r.json():Promise.reject()),fetch(SB+'/rest/v1/products?select=id,category_id,name,description,price_per_kg,unit,discount_percent,is_available,image_url,min_kg&order=sort_order',H).then(r=>r.ok?r.json():Promise.reject())]).then(a=>{C=a[0];P=a[1];reprice();draw()}).catch(()=>{$('grid').innerHTML='<p class="err">تعذر تحميل المنيو. تأكد من الاتصال وحدّث الصفحة.</p>'});
-fetch(SB+'/rest/v1/store_settings?select=whatsapp,payment_number,payment_methods,address,working_hours,min_order,delivery_zones,open_from,open_to,force_closed,closed_message&id=eq.1',H).then(r=>r.ok?r.json():Promise.reject()).then(d=>{const s=d[0];if(!s)return;SH=s;chkOpen();
+Promise.all([fetch(SB+'/rest/v1/categories?select=id,name,section,sort_order&order=sort_order',H).then(r=>r.ok?r.json():Promise.reject()),fetch(SB+'/rest/v1/products?select=id,category_id,name,description,price_per_kg,unit,discount_percent,is_available,is_best_seller,image_url,min_kg&order=sort_order',H).then(r=>r.ok?r.json():Promise.reject())]).then(a=>{C=a[0];P=a[1];reprice();draw()}).catch(()=>{$('grid').innerHTML='<p class="err">تعذر تحميل المنيو. تأكد من الاتصال وحدّث الصفحة.</p>'});
+fetch(SB+'/rest/v1/store_settings?select=whatsapp,payment_number,payment_methods,address,working_hours,min_order,delivery_zones,open_from,open_to,force_closed,closed_message,offers_banner&id=eq.1',H).then(r=>r.ok?r.json():Promise.reject()).then(d=>{const s=d[0];if(!s)return;SH=s;chkOpen();
 if(s.whatsapp){WA=s.whatsapp;document.querySelectorAll('a[href^="https://wa.me/"]').forEach(a=>a.href='https://wa.me/'+WA);$('wal').textContent='0'+WA.replace(/^20/,'')}
+if(s.offers_banner&&s.offers_banner.trim()){$('obt').textContent=s.offers_banner.split('|').map(x=>x.trim()).filter(Boolean).join('   ✦   ');$('ob').hidden=false}
 MIN=+s.min_order||0;setPay(s.payment_methods,s.payment_number);
 const z=s.delivery_zones;if(Array.isArray(z)&&z.length){ZS=z.filter(x=>x&&x.name).map(x=>({name:String(x.name),fee:+x.fee||0}));if(ZS.length){$('zn').innerHTML='<option value="">اختار منطقتك</option>'+ZS.map((x,i)=>`<option value="${i}">${esc(x.name)} — ${x.fee?n(x.fee)+' ج':'مجاناً'}</option>`).join('');$('zl').hidden=false}}
 const c=$('ct2');if(s.address)c.insertAdjacentHTML('beforeend','<br>العنوان: '+esc(s.address));if(s.working_hours)c.insertAdjacentHTML('beforeend','<br>مواعيد العمل: '+esc(s.working_hours));rc()}).catch(()=>{});
+rpc('get_approved_reviews').then(r=>r.ok?r.json():Promise.reject()).then(d=>{if(!d||!d.count||!d.items||!d.items.length)return;$('rvs').hidden=false;$('rva').textContent='متوسط التقييم '+d.avg+' من 5 · '+n(d.count)+' تقييم';
+$('rvg').innerHTML=d.items.map(r=>`<div class="rv"><b aria-label="${r.rating} من 5">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</b> ${esc(r.name)}${r.comment?`<p>${esc(r.comment)}</p>`:''}</div>`).join('')}).catch(()=>{});
 (function(){let c=0,t;document.querySelectorAll('.tap3').forEach(i=>i.addEventListener('click',e=>{c++;clearTimeout(t);t=setTimeout(()=>{c=0},1200);if(c>=3){e.preventDefault();c=0;location.href='cashier.html'}}))})();
+(function(){const el=$('cpy');let t;const go=()=>{location.href='admin.html'},on=()=>{clearTimeout(t);t=setTimeout(go,900)},off=()=>clearTimeout(t);
+el.addEventListener('pointerdown',on);['pointerup','pointerleave','pointercancel'].forEach(v=>el.addEventListener(v,off));el.addEventListener('contextmenu',e=>e.preventDefault())})();
 </script>
 </body>
 </html>
