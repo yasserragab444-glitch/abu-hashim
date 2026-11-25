@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<title>قيّم طلبك | كيتشن فاست</title>
+<title>قيّم طلبك | جزارة ومطعم أبوهاشم</title>
 <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#000;--card:#131313;--line:#2b2b2b;--tx:#f5f3ee;--mut:#a9a69d;--gold:#f6b800;--fire:#ff6a1a;color-scheme:dark}
@@ -45,10 +45,10 @@ const rpc=async(fn,body)=>{
 const head='<img class="logo" src="img/logo.png" alt="شعار كيتشن فاست">';
 const msg=(t,d)=>{box.innerHTML=head+'<h1>'+t+'</h1><p class="mut">'+d+'</p>'};
 async function init(){
-  if(!token)return msg('الرابط غير صحيح','اطلب رابط التقييم من كيتشن فاست على واتساب.');
+  if(!token)return msg('الرابط غير صحيح','اطلب رابط التقييم من جزارة ومطعم أبوهاشم على واتساب.');
   let o;
   try{o=await rpc('get_review_order',{p_token:token})}catch(e){return msg('تعذر تحميل الصفحة',esc(e.message))}
-  if(!o.found)return msg('الرابط غير صحيح','اطلب رابط التقييم من كيتشن فاست على واتساب.');
+  if(!o.found)return msg('الرابط غير صحيح','اطلب رابط التقييم من جزارة ومطعم أبوهاشم على واتساب.');
   if(o.reviewed)return msg('وصلنا تقييمك','شكراً ليك على وقتك.');
   if(!o.delivered)return msg('التقييم لسه مش متاح','هيفتح بعد توصيل طلبك '+esc(o.order_number)+'.');
   box.innerHTML=head+`<div><h1>رأيك في طلبك</h1><p class="mut">أهلاً ${esc(o.customer_name)}، طلب رقم ${esc(o.order_number)}. قيّم تجربتك معانا.</p></div>
