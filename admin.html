@@ -437,8 +437,8 @@ async function products(){
 <label class="b">رفع صورة<input type="file" accept="image/*" data-a="img" hidden></label><button class="b" data-a="save">حفظ</button><button class="b d" data-a="del">حذف</button></div></div>`).join('');
 }
 const rd=c=>{const o={};c.querySelectorAll('[data-f]').forEach(e=>o[e.dataset.f]=e.type=='checkbox'?e.checked:e.type=='number'?(e.value===''?null:+e.value):e.value);return o};
-async function up(f){
-  if(f.size>5e6)throw new Error('الصورة كبيرة (أقصى حجم 5 ميجا)');
+async function shrink(f){if(!/^image\/(jpeg|png|webp)$/.test(f.type))return f;const bmp=await createImageBitmap(f).catch(()=>null);if(!bmp)return f;const k=Math.min(1,1600/Math.max(bmp.width,bmp.height)),c=document.createElement('canvas');c.width=Math.round(bmp.width*k);c.height=Math.round(bmp.height*k);c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);const b=await new Promise(r=>c.toBlob(r,'image/webp',.82));if(!b||(b.size>=f.size&&f.size<=5e6))return f;return new File([b],f.name.replace(/\.[^.]+$/,'')+'.webp',{type:'image/webp'})} async function up(f){
+  f=await shrink(f);if(f.size>5e6)throw new Error('الصورة كبيرة (أقصى حجم 5 ميجا)');
   const p=Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.'+((f.name.split('.').pop()||'jpg').replace(/[^a-z0-9]/gi,'').slice(0,5)||'jpg');
   ok(await sb.storage.from('store-images').upload(p,f,{contentType:f.type}));
   return sb.storage.from('store-images').getPublicUrl(p).data.publicUrl;
