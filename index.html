@@ -34,8 +34,13 @@ nav a{text-decoration:none;color:var(--mut)}nav a:hover{color:var(--gold)}
 .ob span{display:inline-block;padding-inline-start:100%;animation:mq 22s linear infinite}
 @keyframes mq{to{transform:translateX(100%)}}
 @media (prefers-reduced-motion:reduce){.ob span{animation:none;padding:0 5vw}}
-.hero{min-height:78vh;display:grid;place-items:center;text-align:center;background:radial-gradient(circle at 50% 0,#3d0a10 0,#120305 45%,#000 80%)}
-.hc{padding:40px 5vw;max-width:760px}
+.hero{position:relative;overflow:hidden;min-height:78vh;display:grid;place-items:center;text-align:center;background:radial-gradient(circle at 50% 0,#3d0a10 0,#120305 45%,#000 80%)}
+.hbg{position:absolute;inset:0}
+.hbg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s}
+.hbg img.on{opacity:1}
+.hero.hi::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,#000a,#000d)}
+@media (prefers-reduced-motion:reduce){.hbg img{transition:none}}
+.hc{position:relative;z-index:2;padding:40px 5vw;max-width:760px}
 .hc img{width:min(280px,60vw);margin:0 auto 6px}
 .hc h1{font-size:clamp(32px,6.5vw,58px);color:var(--gold)}
 .hc p{font-size:19px;color:#e8e5dc;margin:10px 0 24px}
@@ -100,7 +105,7 @@ aside.on{transform:none;visibility:visible}
 </header>
 <div class="ob" id="ob" hidden><span id="obt"></span></div>
 <main id="top">
-<div class="hero"><div class="hc"><img class="tap3" src="img/logo.png" alt="جزارة ومطعم أبوهاشم"><h1>جزارة ومطعم أبوهاشم</h1><p>لحوم طازجة ومشويات وسندوتشات ووجبات، وخدمة توصيل للمنازل.</p><a class="btn" href="#products">اطلب الآن</a></div></div>
+<div class="hero" id="hero"><div class="hbg" id="hbg" aria-hidden="true"></div><div class="hc"><img class="tap3" src="img/logo.png" alt="جزارة ومطعم أبوهاشم"><h1>جزارة ومطعم أبوهاشم</h1><p>لحوم طازجة ومشويات وسندوتشات ووجبات، وخدمة توصيل للمنازل.</p><a class="btn" href="#products">اطلب الآن</a></div></div>
 <section id="offs" hidden style="background:#120305"><div class="wrap"><h2>العروض</h2><p class="sub">أصناف عليها خصم دلوقتي.</p><div class="grid" id="offg"></div></div></section>
 <section id="bss" hidden><div class="wrap"><h2>الأكثر طلباً</h2><p class="sub">أصناف زبائننا بيرجعوا يطلبوها تاني.</p><div class="grid" id="bsg"></div></div></section>
 <section id="products"><div class="wrap">
@@ -213,9 +218,12 @@ const f=()=>{const r=document.querySelector('[name=py]:checked'),p=$('pn');p.hid
 document.querySelectorAll('[name=py]').forEach(r=>r.onchange=f);f()}
 setPay(null,null);draw();rc();
 Promise.all([fetch(SB+'/rest/v1/categories?select=id,name,section,sort_order&order=sort_order',H).then(r=>r.ok?r.json():Promise.reject()),fetch(SB+'/rest/v1/products?select=id,category_id,name,description,price_per_kg,unit,discount_percent,is_available,is_best_seller,image_url,min_kg&order=sort_order',H).then(r=>r.ok?r.json():Promise.reject())]).then(a=>{C=a[0];P=a[1];reprice();draw()}).catch(()=>{$('grid').innerHTML='<p class="err">تعذر تحميل المنيو. تأكد من الاتصال وحدّث الصفحة.</p>'});
-fetch(SB+'/rest/v1/store_settings?select=whatsapp,payment_number,payment_methods,address,working_hours,min_order,delivery_zones,open_from,open_to,force_closed,closed_message,offers_banner&id=eq.1',H).then(r=>r.ok?r.json():Promise.reject()).then(d=>{const s=d[0];if(!s)return;SH=s;chkOpen();
+fetch(SB+'/rest/v1/store_settings?select=whatsapp,payment_number,payment_methods,address,working_hours,min_order,delivery_zones,open_from,open_to,force_closed,closed_message,offers_banner,hero_images&id=eq.1',H).then(r=>r.ok?r.json():Promise.reject()).then(d=>{const s=d[0];if(!s)return;SH=s;chkOpen();
 if(s.whatsapp){WA=s.whatsapp;document.querySelectorAll('a[href^="https://wa.me/"]').forEach(a=>a.href='https://wa.me/'+WA);$('wal').textContent='0'+WA.replace(/^20/,'')}
 if(s.offers_banner&&s.offers_banner.trim()){$('obt').textContent=s.offers_banner.split('|').map(x=>x.trim()).filter(Boolean).join('   ✦   ');$('ob').hidden=false}
+const hi=(s.hero_images||[]).filter(u=>/^https:\/\//.test(u));
+if(hi.length){$('hbg').innerHTML=hi.map((u,i)=>`<img src="${esc(u)}" alt=""${i?' loading="lazy"':''} class="${i?'':'on'}">`).join('');$('hero').classList.add('hi');
+if(hi.length>1&&!matchMedia('(prefers-reduced-motion:reduce)').matches){let k=0;const im=$('hbg').children;setInterval(()=>{im[k].classList.remove('on');k=(k+1)%im.length;im[k].classList.add('on')},5000)}}
 MIN=+s.min_order||0;setPay(s.payment_methods,s.payment_number);
 const z=s.delivery_zones;if(Array.isArray(z)&&z.length){ZS=z.filter(x=>x&&x.name).map(x=>({name:String(x.name),fee:+x.fee||0}));if(ZS.length){$('zn').innerHTML='<option value="">اختار منطقتك</option>'+ZS.map((x,i)=>`<option value="${i}">${esc(x.name)} — ${x.fee?n(x.fee)+' ج':'مجاناً'}</option>`).join('');$('zl').hidden=false}}
 const c=$('ct2');if(s.address)c.insertAdjacentHTML('beforeend','<br>العنوان: '+esc(s.address));if(s.working_hours)c.insertAdjacentHTML('beforeend','<br>مواعيد العمل: '+esc(s.working_hours));rc()}).catch(()=>{});
