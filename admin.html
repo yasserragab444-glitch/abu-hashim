@@ -71,7 +71,7 @@ summary{cursor:pointer;color:var(--gold)}
 #rc .itr{border-bottom:1px solid #000}
 #rc .itr span:last-child,#rc .ith span:last-child{text-align:left}
 #rc .itt{display:flex;justify-content:space-between;border:2px solid #000;border-radius:8px;padding:4px 8px;font-size:18px;font-weight:800;margin:5px 0}
-#rc svg{width:22mm;height:22mm;display:block;margin:2px auto}
+#rc svg{width:22mm;height:22mm;display:block;margin:2px auto}#rc .rc-meta{font-size:10.5px;line-height:1.25;color:#000;font-weight:600;text-align:center;margin-top:3px}#rc .rc-meta div{margin:1px 0}#rc .rc-meta{font-size:10.5px;line-height:1.25;color:#000;font-weight:600;text-align:center;margin-top:3px}#rc .rc-meta div{margin:1px 0}
 .irow{display:grid;grid-template-columns:3fr 2fr 1.3fr auto;gap:6px}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 @media print{
@@ -203,7 +203,7 @@ function rc(){
   if($("nt").value)h+='<div>ملاحظات: '+esc($("nt").value)+'</div>';
   h+='<hr class="id"><div class="ict isec">شكراً لاختيارك جزارة ومطعم أبوهاشم</div><div class="ict">منتجات مجهزة بعناية</div>'
   +'<svg viewBox="0 0 37 37" shape-rendering="crispEdges"><path d="'+QRD+'"/></svg><div class="ict">امسح الرمز لزيارة المتجر</div>'
-  +'<div class="ict">واتساب: '+SPH+'</div><hr><div class="ict">نتمنى لك وجبة شهية</div>';
+  +'<div class="ict">واتساب: '+SPH+'</div><hr><div class="ict">نتمنى لك وجبة شهية</div><div class="rc-meta"><div>المسئول: yasser</div><div>تواصل: 01069639173 / 33870738</div><div>العنوان: 252شارع الملك فيصل -محطة التعاون</div></div>';
   r.innerHTML=h;const fit=()=>{const mm=Math.ceil(r.scrollHeight*25.4/96)+3;$("pg").textContent="@page{size:"+wd+"mm "+mm+"mm;margin:0}"};fit();r.querySelectorAll("img").forEach(i=>{if(!i.complete)i.onload=fit});
 }
 function iwa(){
