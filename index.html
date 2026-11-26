@@ -38,7 +38,8 @@ nav a{text-decoration:none;color:var(--mut)}nav a:hover{color:var(--gold)}
 .hbg{position:absolute;inset:0}
 .hbg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s}
 .hbg img.on{opacity:1}
-.hero.hi::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,#000a,#000d)}
+.hero.hi::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.5))}
+.hi .hc h1,.hi .hc p{text-shadow:0 2px 12px rgba(0,0,0,.85)}.hi .hc img{filter:drop-shadow(0 2px 8px rgba(0,0,0,.8))}
 @media (prefers-reduced-motion:reduce){.hbg img{transition:none}}
 .hc{position:relative;z-index:2;padding:40px 5vw;max-width:760px}
 .hc img{width:min(280px,60vw);margin:0 auto 6px}
